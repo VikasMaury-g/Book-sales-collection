@@ -52,6 +52,19 @@
     }
     .header-icons { display: flex; align-items: center; gap: 16px; }
     .header-icons svg { width: 20px; height: 20px; fill: #555; cursor: pointer; }
+    .lang-toggle {
+      border: 1px solid #8B1A1A;
+      background: #fff;
+      color: #8B1A1A;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 74px;
+      font-family: inherit;
+    }
+    .lang-toggle:hover { background: #fff4ee; }
 
     /* ── Main ── */
     .main { flex: 1; max-width: 960px; width: 100%; margin: 0 auto; padding: 24px 16px 40px; }
@@ -351,9 +364,10 @@
   <header class="header">
     <div class="header-logo">
       <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-      Book Sales Collection
+      <span data-i18n="appTitle">Book Sales Collection</span>
     </div>
     <div class="header-icons">
+      <button class="lang-toggle" id="langToggle" type="button" onclick="toggleLanguage()">हिन्दी</button>
       <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
       <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
     </div>
@@ -361,24 +375,24 @@
 
   <!-- Main Content -->
   <div class="main">
-    <h1 class="page-title">Book Sales Entry Portal</h1>
-    <p class="page-subtitle">Record multiple book sales in a single transaction. Manage your cart and synchronize with central Gita Press archives.</p>
+    <h1 class="page-title" data-i18n="pageTitle">Book Sales Entry Portal</h1>
+    <p class="page-subtitle" data-i18n="pageSubtitle">Record multiple book sales in a single transaction. Manage your cart and synchronize with central Gita Press archives.</p>
 
     <!-- Section 1 -->
     <div class="card">
       <div class="section-heading">
         <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4z"/></svg>
-        Section 1: Seller / Branch Details
+        <span data-i18n="sectionSeller">Section 1: Seller / Branch Details</span>
       </div>
       <div class="form-grid cols-2">
         <div class="form-group">
-          <label>Selling Date <span style="color:#c0392b">*</span></label>
+          <label><span data-i18n="sellingDate">Selling Date</span> <span style="color:#c0392b">*</span></label>
           <input type="date" id="sellingDate" required>
         </div>
         <div class="form-group">
-          <label>Branch Name <span style="color:#c0392b">*</span></label>
+          <label><span data-i18n="branchName">Branch Name</span> <span style="color:#c0392b">*</span></label>
           <select id="branchName">
-            <option value="">Select Branch</option>
+            <option value="" data-i18n="selectBranch">Select Branch</option>
             <option value="Gorakhpur">Gorakhpur</option>
             <option value="Kolkata">Kolkata</option>
             <option value="Delhi">Delhi</option>
@@ -402,12 +416,12 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Seller Name <span style="color:#c0392b">*</span></label>
-          <input type="text" id="sellerName" placeholder="Staff Name" required>
+          <label><span data-i18n="sellerName">Seller Name</span> <span style="color:#c0392b">*</span></label>
+          <input type="text" id="sellerName" placeholder="Staff Name" data-i18n-placeholder="staffName" required>
         </div>
         <div class="form-group">
-          <label>Seller Mobile <span style="color:#c0392b">*</span></label>
-          <input type="tel" id="sellerMobile" placeholder="10-digit mobile" maxlength="10" required>
+          <label><span data-i18n="sellerMobile">Seller Mobile</span> <span style="color:#c0392b">*</span></label>
+          <input type="tel" id="sellerMobile" placeholder="10-digit mobile" data-i18n-placeholder="mobilePlaceholder" maxlength="10" required>
         </div>
       </div>
     </div>
@@ -416,45 +430,45 @@
     <div class="card">
       <div class="section-heading">
         <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-        Section 2: Book Entry
+        <span data-i18n="sectionBook">Section 2: Book Entry</span>
       </div>
       <div class="form-grid cols-4">
         <div class="form-group">
-          <label>Book Code <span style="color:#c0392b">*</span></label>
-          <input type="text" id="bookCode" placeholder="e.g., GP001">
+          <label><span data-i18n="bookCode">Book Code</span> <span style="color:#c0392b">*</span></label>
+          <input type="text" id="bookCode" placeholder="e.g., 54" data-i18n-placeholder="bookCodePlaceholder">
         </div>
         <div class="form-group">
-          <label>Book Name</label>
+          <label data-i18n="bookName">Book Name</label>
           <input type="text" id="bookName" readonly>
         </div>
         <div class="form-group">
-          <label>Rate (&#8377;)</label>
+          <label data-i18n="rate">Rate (&#8377;)</label>
           <input type="text" id="rate" readonly>
         </div>
         <div class="form-group">
-          <label>Bundle Packing</label>
+          <label data-i18n="bundlePacking">Bundle Packing</label>
           <input type="text" id="bundlePacking" readonly>
         </div>
         <div class="form-group">
-          <label>Unit Quantity</label>
+          <label data-i18n="unitQty">Unit Quantity</label>
           <input type="number" id="unitQty" value="0" min="0">
         </div>
         <div class="form-group">
-          <label>Bundle Quantity</label>
+          <label data-i18n="bundleQty">Bundle Quantity</label>
           <input type="number" id="bundleQty" value="0" min="0">
         </div>
         <div class="computed-box">
-          <label class="total-units-label">Total Units</label>
+          <label class="total-units-label" data-i18n="totalUnits">Total Units</label>
           <span class="value orange" id="totalUnits">0</span>
         </div>
         <div class="computed-box">
-          <label class="total-amount-label">Total Amount</label>
+          <label class="total-amount-label" data-i18n="totalAmount">Total Amount</label>
           <span class="value red" id="totalAmount">&#8377; 0.00</span>
         </div>
       </div>
       <button class="btn-add-cart" onclick="addToCart()">
         <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-        Add to Cart
+        <span data-i18n="addToCart">Add to Cart</span>
       </button>
     </div>
 
@@ -462,41 +476,41 @@
     <div class="card">
       <div class="section-heading">
         <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-        Section 3: Book Cart
+        <span data-i18n="sectionCart">Section 3: Book Cart</span>
       </div>
       <div class="cart-table-wrap">
         <table class="cart-table">
           <thead>
             <tr>
-              <th>S. No.</th>
-              <th>Code</th>
-              <th>Book Name</th>
-              <th>Rate</th>
-              <th>Packing</th>
-              <th>Unit Qty</th>
-              <th>Bundle Qty</th>
-              <th>Total Units</th>
-              <th>Total Amount</th>
-              <th>Action</th>
+              <th data-i18n="serialNo">S. No.</th>
+              <th data-i18n="code">Code</th>
+              <th data-i18n="bookName">Book Name</th>
+              <th data-i18n="rateShort">Rate</th>
+              <th data-i18n="packing">Packing</th>
+              <th data-i18n="unitQtyShort">Unit Qty</th>
+              <th data-i18n="bundleQtyShort">Bundle Qty</th>
+              <th data-i18n="totalUnits">Total Units</th>
+              <th data-i18n="totalAmount">Total Amount</th>
+              <th data-i18n="action">Action</th>
             </tr>
           </thead>
           <tbody id="cartBody">
-            <tr id="emptyRow"><td colspan="10" class="cart-empty">No books added to cart yet.</td></tr>
+            <tr id="emptyRow"><td colspan="10" class="cart-empty" data-i18n="emptyCart">No books added to cart yet.</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="summary-row">
         <div class="summary-box beige">
-          <div class="s-label">Total Different Books</div>
+          <div class="s-label" data-i18n="totalDifferentBooks">Total Different Books</div>
           <div class="s-value maroon" id="sumBooks">0</div>
         </div>
         <div class="summary-box green">
-          <div class="s-label">Grand Total Units</div>
+          <div class="s-label" data-i18n="grandTotalUnits">Grand Total Units</div>
           <div class="s-value green-text" id="sumUnits">0</div>
         </div>
         <div class="summary-box orange-bg">
-          <div class="s-label">Grand Total Amount</div>
+          <div class="s-label" data-i18n="grandTotalAmount">Grand Total Amount</div>
           <div class="s-value orange-text" id="sumAmount">&#8377; 0.00</div>
         </div>
       </div>
@@ -504,11 +518,11 @@
       <div class="action-row">
         <button class="btn-reset" onclick="resetCart()">
           <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-          Reset Cart
+          <span data-i18n="resetCart">Reset Cart</span>
         </button>
         <button class="btn-save" onclick="saveRecord()">
           <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
-          Save Selling Record
+          <span data-i18n="saveRecord">Save Selling Record</span>
         </button>
       </div>
     </div>
@@ -516,11 +530,11 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <span><a href="#" style="margin-left:0">Gita Press Portal</a> &copy; 2024. System Version 2.5.0</span>
+    <span><a href="#" style="margin-left:0" data-i18n="portal">Gita Press Portal</a> &copy; 2024. <span data-i18n="version">System Version 2.5.0</span></span>
     <span>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Contact Support</a>
-      <a href="#">Terms of Service</a>
+      <a href="#" data-i18n="privacy">Privacy Policy</a>
+      <a href="#" data-i18n="support">Contact Support</a>
+      <a href="#" data-i18n="terms">Terms of Service</a>
     </span>
   </footer>
 
@@ -528,7 +542,7 @@
   <div class="overlay" id="loadingOverlay">
     <div class="overlay-box">
       <div class="spinner"></div>
-      <div>Saving records...</div>
+      <div data-i18n="saving">Saving records...</div>
     </div>
   </div>
 
@@ -538,11 +552,165 @@
     var APPS_SCRIPT_URL ='https://script.google.com/a/macros/gitapress.org/s/AKfycbzdZolp6fJfvhXOvlGuu2vbWncAZbuYlbzlw4bS5pM6JOGEntEfLolm8ONTrG1A1eUB/exec';
     var cart = [];
     var currentBook = null;
+    var currentLang = localStorage.getItem('bookSalesLang') || 'en';
+
+    var I18N = {
+      en: {
+        appTitle: 'Book Sales Collection',
+        pageTitle: 'Book Sales Entry Portal',
+        pageSubtitle: 'Record multiple book sales in a single transaction. Manage your cart and synchronize with central Gita Press archives.',
+        sectionSeller: 'Section 1: Seller / Branch Details',
+        sellingDate: 'Selling Date',
+        branchName: 'Branch Name',
+        selectBranch: 'Select Branch',
+        sellerName: 'Seller Name',
+        staffName: 'Staff Name',
+        sellerMobile: 'Seller Mobile',
+        mobilePlaceholder: '10-digit mobile',
+        sectionBook: 'Section 2: Book Entry',
+        bookCode: 'Book Code',
+        bookCodePlaceholder: 'e.g., 54',
+        bookName: 'Book Name',
+        rate: 'Rate (₹)',
+        rateShort: 'Rate',
+        bundlePacking: 'Bundle Packing',
+        unitQty: 'Unit Quantity',
+        bundleQty: 'Bundle Quantity',
+        unitQtyShort: 'Unit Qty',
+        bundleQtyShort: 'Bundle Qty',
+        totalUnits: 'Total Units',
+        totalAmount: 'Total Amount',
+        addToCart: 'Add to Cart',
+        sectionCart: 'Section 3: Book Cart',
+        serialNo: 'S. No.',
+        code: 'Code',
+        packing: 'Packing',
+        action: 'Action',
+        emptyCart: 'No books added to cart yet.',
+        totalDifferentBooks: 'Total Different Books',
+        grandTotalUnits: 'Grand Total Units',
+        grandTotalAmount: 'Grand Total Amount',
+        resetCart: 'Reset Cart',
+        saveRecord: 'Save Selling Record',
+        portal: 'Gita Press Portal',
+        version: 'System Version 2.5.0',
+        privacy: 'Privacy Policy',
+        support: 'Contact Support',
+        terms: 'Terms of Service',
+        saving: 'Saving records...',
+        toggleLabel: 'हिन्दी',
+        validBookRequired: 'Please enter a valid Book Code first.',
+        qtyNegative: 'Quantities cannot be negative.',
+        qtyRequired: 'At least one quantity must be greater than 0.',
+        resetConfirm: 'Are you sure you want to reset the cart?',
+        dateRequired: 'Please select a Selling Date.',
+        branchRequired: 'Please select a Branch Name.',
+        sellerRequired: 'Please enter Seller Name.',
+        mobileRequired: 'Seller Mobile must be exactly 10 digits.',
+        cartRequired: 'Cart is empty. Add at least one book.',
+        notFoundPrefix: 'Book Code "',
+        notFoundSuffix: '" not found.',
+        lookupError: 'Lookup error: ',
+        saveFailed: 'Save failed: ',
+        saveNoResponse: 'Save failed. Apps Script URL/deployment is not responding.',
+        saveTimeout: 'Save failed. Apps Script took too long to respond.',
+        errorPrefix: 'Error: ',
+        remove: 'Remove',
+        saveSuccess: 'Record saved successfully!'
+      },
+      hi: {
+        appTitle: 'पुस्तक बिक्री संग्रह',
+        pageTitle: 'पुस्तक बिक्री एंट्री पोर्टल',
+        pageSubtitle: 'एक ही लेन-देन में कई पुस्तकों की बिक्री दर्ज करें। कार्ट संभालें और रिकॉर्ड Google Sheet में सेव करें।',
+        sectionSeller: 'भाग 1: विक्रेता / शाखा विवरण',
+        sellingDate: 'बिक्री दिनांक',
+        branchName: 'शाखा का नाम',
+        selectBranch: 'शाखा चुनें',
+        sellerName: 'विक्रेता का नाम',
+        staffName: 'स्टाफ का नाम',
+        sellerMobile: 'विक्रेता मोबाइल',
+        mobilePlaceholder: '10 अंकों का मोबाइल',
+        sectionBook: 'भाग 2: पुस्तक एंट्री',
+        bookCode: 'पुस्तक कोड',
+        bookCodePlaceholder: 'जैसे, 54',
+        bookName: 'पुस्तक का नाम',
+        rate: 'दर (₹)',
+        rateShort: 'दर',
+        bundlePacking: 'बंडल पैकिंग',
+        unitQty: 'यूनिट मात्रा',
+        bundleQty: 'बंडल मात्रा',
+        unitQtyShort: 'यूनिट',
+        bundleQtyShort: 'बंडल',
+        totalUnits: 'कुल यूनिट',
+        totalAmount: 'कुल राशि',
+        addToCart: 'कार्ट में जोड़ें',
+        sectionCart: 'भाग 3: पुस्तक कार्ट',
+        serialNo: 'क्र. सं.',
+        code: 'कोड',
+        packing: 'पैकिंग',
+        action: 'कार्य',
+        emptyCart: 'अभी तक कार्ट में कोई पुस्तक नहीं जोड़ी गई है।',
+        totalDifferentBooks: 'कुल अलग पुस्तकें',
+        grandTotalUnits: 'कुल यूनिट',
+        grandTotalAmount: 'कुल राशि',
+        resetCart: 'कार्ट रीसेट करें',
+        saveRecord: 'बिक्री रिकॉर्ड सेव करें',
+        portal: 'गीता प्रेस पोर्टल',
+        version: 'सिस्टम संस्करण 2.5.0',
+        privacy: 'गोपनीयता नीति',
+        support: 'सहायता संपर्क',
+        terms: 'सेवा शर्तें',
+        saving: 'रिकॉर्ड सेव हो रहा है...',
+        toggleLabel: 'English',
+        validBookRequired: 'कृपया पहले सही पुस्तक कोड दर्ज करें।',
+        qtyNegative: 'मात्रा नकारात्मक नहीं हो सकती।',
+        qtyRequired: 'कम से कम एक मात्रा 0 से अधिक होनी चाहिए।',
+        resetConfirm: 'क्या आप कार्ट रीसेट करना चाहते हैं?',
+        dateRequired: 'कृपया बिक्री दिनांक चुनें।',
+        branchRequired: 'कृपया शाखा का नाम चुनें।',
+        sellerRequired: 'कृपया विक्रेता का नाम दर्ज करें।',
+        mobileRequired: 'विक्रेता मोबाइल ठीक 10 अंकों का होना चाहिए।',
+        cartRequired: 'कार्ट खाली है। कम से कम एक पुस्तक जोड़ें।',
+        notFoundPrefix: 'पुस्तक कोड "',
+        notFoundSuffix: '" नहीं मिला।',
+        lookupError: 'लुकअप त्रुटि: ',
+        saveFailed: 'सेव असफल: ',
+        saveNoResponse: 'सेव असफल। Apps Script URL/deployment जवाब नहीं दे रहा है।',
+        saveTimeout: 'सेव असफल। Apps Script ने जवाब देने में बहुत समय लिया।',
+        errorPrefix: 'त्रुटि: ',
+        remove: 'हटाएं',
+        saveSuccess: 'रिकॉर्ड सफलतापूर्वक सेव हो गया!'
+      }
+    };
+
+    function t(key) {
+      return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
+    }
+
+    function toggleLanguage() {
+      setLanguage(currentLang === 'en' ? 'hi' : 'en');
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('bookSalesLang', currentLang);
+      document.documentElement.lang = currentLang === 'hi' ? 'hi' : 'en';
+      document.title = t('appTitle');
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        el.textContent = t(el.getAttribute('data-i18n'));
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+        el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));
+      });
+      document.getElementById('langToggle').textContent = t('toggleLabel');
+      renderCart();
+    }
 
     // ── Init ──
     window.addEventListener('DOMContentLoaded', function() {
       var today = new Date().toISOString().split('T')[0];
       document.getElementById('sellingDate').value = today;
+      setLanguage(currentLang);
       loadBranches();
     });
 
@@ -601,11 +769,11 @@
               recalc();
             } else { clearBookFields(); alert(result.message); }
           })
-          .withFailureHandler(function(e) { alert('Lookup error: ' + e); })
+          .withFailureHandler(function(e) { alert(t('lookupError') + e); })
           .getBookByCode(code);
       } else {
         clearBookFields();
-        alert('Book Code "' + code + '" not found.');
+        alert(t('notFoundPrefix') + code + t('notFoundSuffix'));
       }
     }
 
@@ -635,11 +803,11 @@
 
     // ── Add to Cart ──
     function addToCart() {
-      if (!currentBook) { alert('Please enter a valid Book Code first.'); return; }
+      if (!currentBook) { alert(t('validBookRequired')); return; }
       var unitQty = parseInt(document.getElementById('unitQty').value) || 0;
       var bundleQty = parseInt(document.getElementById('bundleQty').value) || 0;
-      if (unitQty < 0 || bundleQty < 0) { alert('Quantities cannot be negative.'); return; }
-      if (unitQty === 0 && bundleQty === 0) { alert('At least one quantity must be greater than 0.'); return; }
+      if (unitQty < 0 || bundleQty < 0) { alert(t('qtyNegative')); return; }
+      if (unitQty === 0 && bundleQty === 0) { alert(t('qtyRequired')); return; }
 
       var packing = currentBook.bundlePacking;
       var rate = currentBook.rate;
@@ -678,7 +846,7 @@
       var tbody = document.getElementById('cartBody');
       tbody.innerHTML = '';
       if (cart.length === 0) {
-        tbody.innerHTML = '<tr id="emptyRow"><td colspan="10" class="cart-empty">No books added to cart yet.</td></tr>';
+        tbody.innerHTML = '<tr id="emptyRow"><td colspan="10" class="cart-empty">' + t('emptyCart') + '</td></tr>';
         updateSummary();
         return;
       }
@@ -694,7 +862,7 @@
           '<td>' + item.bundleQty + '</td>' +
           '<td>' + item.totalUnits + '</td>' +
           '<td>₹ ' + item.totalAmount.toFixed(2) + '</td>' +
-          '<td><button class="btn-remove" onclick="removeItem(' + i + ')">Remove</button></td>';
+          '<td><button class="btn-remove" onclick="removeItem(' + i + ')">' + t('remove') + '</button></td>';
         tbody.appendChild(tr);
       });
       updateSummary();
@@ -719,7 +887,7 @@
 
     // ── Reset Cart ──
     function resetCart() {
-      if (cart.length > 0 && !confirm('Are you sure you want to reset the cart?')) return;
+      if (cart.length > 0 && !confirm(t('resetConfirm'))) return;
       cart = [];
       renderCart();
       document.getElementById('bookCode').value = '';
@@ -736,11 +904,11 @@
       var sellerMobile = document.getElementById('sellerMobile').value.trim();
       var remarks = '';
 
-      if (!sellingDate) { alert('Please select a Selling Date.'); return; }
-      if (!branchName) { alert('Please select a Branch Name.'); return; }
-      if (!sellerName) { alert('Please enter Seller Name.'); return; }
-      if (!/^\d{10}$/.test(sellerMobile)) { alert('Seller Mobile must be exactly 10 digits.'); return; }
-      if (cart.length === 0) { alert('Cart is empty. Add at least one book.'); return; }
+      if (!sellingDate) { alert(t('dateRequired')); return; }
+      if (!branchName) { alert(t('branchRequired')); return; }
+      if (!sellerName) { alert(t('sellerRequired')); return; }
+      if (!/^\d{10}$/.test(sellerMobile)) { alert(t('mobileRequired')); return; }
+      if (cart.length === 0) { alert(t('cartRequired')); return; }
 
       var sellerDetails = {
         sellingDate: sellingDate,
@@ -755,7 +923,7 @@
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(handleSaveSuccess)
-          .withFailureHandler(function(e) { showLoading(false); alert('Save failed: ' + e); })
+          .withFailureHandler(function(e) { showLoading(false); alert(t('saveFailed') + e); })
           .saveSalesData(sellerDetails, cart);
       } else {
         var payload = JSON.stringify({ sellerDetails: sellerDetails, cartItems: cart });
@@ -780,14 +948,14 @@
         delete window[callbackName];
         if (script.parentNode) document.body.removeChild(script);
         showLoading(false);
-        alert('Save failed. Apps Script URL/deployment is not responding.');
+        alert(t('saveNoResponse'));
       };
 
       timeoutId = setTimeout(function() {
         delete window[callbackName];
         if (script.parentNode) document.body.removeChild(script);
         showLoading(false);
-        alert('Save failed. Apps Script took too long to respond.');
+        alert(t('saveTimeout'));
       }, 15000);
 
       script.src = APPS_SCRIPT_URL +
@@ -799,7 +967,7 @@
     function handleSaveSuccess(result) {
       showLoading(false);
       if (result.success) {
-        alert(result.message);
+        alert(currentLang === 'hi' ? t('saveSuccess') : result.message);
         cart = [];
         renderCart();
         document.getElementById('bookCode').value = '';
@@ -807,7 +975,7 @@
         document.getElementById('bundleQty').value = '0';
         clearBookFields();
       } else {
-        alert('Error: ' + result.message);
+        alert(t('errorPrefix') + result.message);
       }
     }
 
