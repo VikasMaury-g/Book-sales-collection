@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Sales Collection</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #faf6f0;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e8e0d8;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #8B1A1A;
+    }
+    .header-logo svg { width: 28px; height: 28px; fill: #8B1A1A; }
+    .header-nav { display: flex; align-items: center; gap: 24px; }
+    .header-nav a {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #555;
+      padding-bottom: 2px;
+    }
+    .header-nav a.active {
+      color: #8B1A1A;
+      border-bottom: 2px solid #8B1A1A;
+    }
+    .header-icons { display: flex; align-items: center; gap: 16px; }
+    .header-icons svg { width: 20px; height: 20px; fill: #555; cursor: pointer; }
+
+    /* ── Main ── */
+    .main { flex: 1; max-width: 960px; width: 100%; margin: 0 auto; padding: 24px 16px 40px; }
+
+    .page-title { color: #8B1A1A; font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .page-subtitle { color: #666; font-size: 13px; margin-bottom: 24px; line-height: 1.5; }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #8B1A1A;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .section-heading svg { width: 18px; height: 18px; fill: #8B1A1A; }
+
+    /* ── Form Grid ── */
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .form-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+
+    .form-group { display: flex; flex-direction: column; }
+    .form-group.span-2 { grid-column: span 2; }
+    .form-group.span-row { grid-row: span 2; }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #555;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: #333;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #c0392b;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #bbb; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .form-group input[readonly] { background: #f9f9f9; color: #888; }
+
+    /* ── Computed Fields ── */
+    .computed-box {
+      background: #fff8f0;
+      border: 1.5px solid #f5c77e;
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+    }
+    .computed-box label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .computed-box .total-units-label { color: #e67e22; }
+    .computed-box .total-amount-label { color: #c0392b; }
+    .computed-box .value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .computed-box .value.orange { color: #e67e22; }
+    .computed-box .value.red { color: #c0392b; }
+
+    /* ── Add to Cart Button ── */
+    .btn-add-cart {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #e67e22;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 40px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn-add-cart:hover { background: #d35400; }
+    .btn-add-cart svg { width: 18px; height: 18px; fill: #fff; }
+
+    /* ── Cart Table ── */
+    .cart-table-wrap { overflow-x: auto; margin-bottom: 20px; }
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .cart-table th {
+      background: #faf6f0;
+      color: #555;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 2px solid #eee;
+      white-space: nowrap;
+    }
+    .cart-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      white-space: nowrap;
+    }
+    .cart-table tr:hover td { background: #fef9f3; }
+    .cart-empty {
+      text-align: center;
+      padding: 32px;
+      color: #aaa;
+      font-style: italic;
+      font-size: 14px;
+    }
+    .btn-remove {
+      background: none;
+      border: 1px solid #e74c3c;
+      color: #e74c3c;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-remove:hover { background: #e74c3c; color: #fff; }
+
+    /* ── Summary Boxes ── */
+    .summary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .summary-box.beige { background: #faf0e4; }
+    .summary-box.green { background: #edf7ed; }
+    .summary-box.orange-bg { background: #fff3e0; }
+    .summary-box .s-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #777;
+      margin-bottom: 6px;
+    }
+    .summary-box .s-value {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .summary-box .s-value.maroon { color: #8B1A1A; }
+    .summary-box .s-value.green-text { color: #2e7d32; }
+    .summary-box .s-value.orange-text { color: #e65100; }
+
+    /* ── Action Buttons ── */
+    .action-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      color: #8B1A1A;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 14px 36px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover { border-color: #8B1A1A; }
+    .btn-reset svg { width: 16px; height: 16px; fill: #8B1A1A; }
+    .btn-save {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #e67e22;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 36px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-save:hover { background: #d35400; }
+    .btn-save svg { width: 16px; height: 16px; fill: #fff; }
+
+    /* ── Footer ── */
+    .footer {
+      background: #fff;
+      border-top: 1px solid #e8e0d8;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: #888;
+    }
+    .footer a { color: #8B1A1A; text-decoration: none; margin-left: 16px; }
+
+    /* ── Loading Overlay ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+    .overlay.active { display: flex; }
+    .overlay-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px 48px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 4px solid #eee;
+      border-top-color: #e67e22;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .header { padding: 0 12px; }
+      .header-nav { gap: 12px; }
+      .header-nav a { font-size: 12px; }
+      .main { padding: 16px 10px 32px; }
+      .form-grid.cols-3, .form-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+      .form-group.span-2 { grid-column: span 2; }
+      .summary-row { grid-template-columns: 1fr; }
+      .action-row { flex-direction: column; align-items: stretch; }
+      .btn-reset, .btn-save { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .form-grid.cols-3, .form-grid.cols-4, .form-grid.cols-2 { grid-template-columns: 1fr; }
+      .form-group.span-2 { grid-column: span 1; }
+      .header-logo { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-logo">
+      <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+      Book Sales Collection
+    </div>
+    <div class="header-icons">
+      <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main">
+    <h1 class="page-title">Book Sales Entry Portal</h1>
+    <p class="page-subtitle">Record multiple book sales in a single transaction. Manage your cart and synchronize with central Gita Press archives.</p>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <div class="section-heading">
+        <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4z"/></svg>
+        Section 1: Seller / Branch Details
+      </div>
+      <div class="form-grid cols-2">
+        <div class="form-group">
+          <label>Selling Date <span style="color:#c0392b">*</span></label>
+          <input type="date" id="sellingDate" required>
+        </div>
+        <div class="form-group">
+          <label>Branch Name <span style="color:#c0392b">*</span></label>
+          <select id="branchName">
+            <option value="">Select Branch</option>
+            <option value="Gorakhpur">Gorakhpur</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Kanpur">Kanpur</option>
+            <option value="Surat">Surat</option>
+            <option value="Varanasi">Varanasi</option>
+            <option value="Indore">Indore</option>
+            <option value="Patna">Patna</option>
+            <option value="Bhilwara">Bhilwara</option>
+            <option value="Haridwar">Haridwar</option>
+            <option value="Rishikesh">Rishikesh</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Bengaluru">Bengaluru</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Cuttack">Cuttack</option>
+            <option value="Raipur">Raipur</option>
+            <option value="Jalgaon">Jalgaon</option>
+            <option value="Nagpur">Nagpur</option>
+            <option value="Ranchi">Ranchi</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Seller Name <span style="color:#c0392b">*</span></label>
+          <input type="text" id="sellerName" placeholder="Staff Name" required>
+        </div>
+        <div class="form-group">
+          <label>Seller Mobile <span style="color:#c0392b">*</span></label>
+          <input type="tel" id="sellerMobile" placeholder="10-digit mobile" maxlength="10" required>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <div class="section-heading">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        Section 2: Book Entry
+      </div>
+      <div class="form-grid cols-4">
+        <div class="form-group">
+          <label>Book Code <span style="color:#c0392b">*</span></label>
+          <input type="text" id="bookCode" placeholder="e.g., GP001">
+        </div>
+        <div class="form-group">
+          <label>Book Name</label>
+          <input type="text" id="bookName" readonly>
+        </div>
+        <div class="form-group">
+          <label>Rate (&#8377;)</label>
+          <input type="text" id="rate" readonly>
+        </div>
+        <div class="form-group">
+          <label>Bundle Packing</label>
+          <input type="text" id="bundlePacking" readonly>
+        </div>
+        <div class="form-group">
+          <label>Unit Quantity</label>
+          <input type="number" id="unitQty" value="0" min="0">
+        </div>
+        <div class="form-group">
+          <label>Bundle Quantity</label>
+          <input type="number" id="bundleQty" value="0" min="0">
+        </div>
+        <div class="computed-box">
+          <label class="total-units-label">Total Units</label>
+          <span class="value orange" id="totalUnits">0</span>
+        </div>
+        <div class="computed-box">
+          <label class="total-amount-label">Total Amount</label>
+          <span class="value red" id="totalAmount">&#8377; 0.00</span>
+        </div>
+      </div>
+      <button class="btn-add-cart" onclick="addToCart()">
+        <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        Add to Cart
+      </button>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <div class="section-heading">
+        <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        Section 3: Book Cart
+      </div>
+      <div class="cart-table-wrap">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>S. No.</th>
+              <th>Code</th>
+              <th>Book Name</th>
+              <th>Rate</th>
+              <th>Packing</th>
+              <th>Unit Qty</th>
+              <th>Bundle Qty</th>
+              <th>Total Units</th>
+              <th>Total Amount</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="cartBody">
+            <tr id="emptyRow"><td colspan="10" class="cart-empty">No books added to cart yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-box beige">
+          <div class="s-label">Total Different Books</div>
+          <div class="s-value maroon" id="sumBooks">0</div>
+        </div>
+        <div class="summary-box green">
+          <div class="s-label">Grand Total Units</div>
+          <div class="s-value green-text" id="sumUnits">0</div>
+        </div>
+        <div class="summary-box orange-bg">
+          <div class="s-label">Grand Total Amount</div>
+          <div class="s-value orange-text" id="sumAmount">&#8377; 0.00</div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-reset" onclick="resetCart()">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Reset Cart
+        </button>
+        <button class="btn-save" onclick="saveRecord()">
+          <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+          Save Selling Record
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span><a href="#" style="margin-left:0">Gita Press Portal</a> &copy; 2024. System Version 2.5.0</span>
+    <span>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Contact Support</a>
+      <a href="#">Terms of Service</a>
+    </span>
+  </footer>
+
+  <!-- Loading Overlay -->
+  <div class="overlay" id="loadingOverlay">
+    <div class="overlay-box">
+      <div class="spinner"></div>
+      <div>Saving records...</div>
+    </div>
+  </div>
+
+  <script src="bookmaster.js"></script>
+  <script>
+    if (typeof BOOK_MASTER === 'undefined') var BOOK_MASTER = {};
+    var APPS_SCRIPT_URL ='https://script.google.com/a/macros/gitapress.org/s/AKfycbzdZolp6fJfvhXOvlGuu2vbWncAZbuYlbzlw4bS5pM6JOGEntEfLolm8ONTrG1A1eUB/exec';
+    var cart = [];
+    var currentBook = null;
+
+    // ── Init ──
+    window.addEventListener('DOMContentLoaded', function() {
+      var today = new Date().toISOString().split('T')[0];
+      document.getElementById('sellingDate').value = today;
+      loadBranches();
+    });
+
+    function loadBranches() {
+      if (typeof google !== 'undefined' && google.script) {
+        google.script.run
+          .withSuccessHandler(function(branches) {
+            var sel = document.getElementById('branchName');
+            branches.forEach(function(b) {
+              var opt = document.createElement('option');
+              opt.value = b;
+              opt.textContent = b;
+              sel.appendChild(opt);
+            });
+          })
+          .withFailureHandler(function(e) { console.error('Failed to load branches:', e); })
+          .getBranches();
+      }
+    }
+
+    // ── Book Code Lookup ──
+    var lookupTimer = null;
+    document.getElementById('bookCode').addEventListener('input', function() {
+      clearTimeout(lookupTimer);
+      var code = this.value.trim();
+      if (!code) { clearBookFields(); return; }
+      lookupTimer = setTimeout(function() { lookupBook(code); }, 400);
+    });
+
+    document.getElementById('bookCode').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        clearTimeout(lookupTimer);
+        var code = this.value.trim();
+        if (code) lookupBook(code);
+      }
+    });
+
+    function lookupBook(code) {
+      var key = code.toString().trim();
+      var entry = BOOK_MASTER[key];
+      if (entry) {
+        currentBook = { bookCode: key, bookName: entry[0], bundlePacking: entry[1], rate: entry[2] };
+        document.getElementById('bookName').value = entry[0];
+        document.getElementById('rate').value = entry[2];
+        document.getElementById('bundlePacking').value = entry[1];
+        recalc();
+      } else if (typeof google !== 'undefined' && google.script) {
+        google.script.run
+          .withSuccessHandler(function(result) {
+            if (result.success) {
+              currentBook = result.book;
+              document.getElementById('bookName').value = result.book.bookName;
+              document.getElementById('rate').value = result.book.rate;
+              document.getElementById('bundlePacking').value = result.book.bundlePacking;
+              recalc();
+            } else { clearBookFields(); alert(result.message); }
+          })
+          .withFailureHandler(function(e) { alert('Lookup error: ' + e); })
+          .getBookByCode(code);
+      } else {
+        clearBookFields();
+        alert('Book Code "' + code + '" not found.');
+      }
+    }
+
+    function clearBookFields() {
+      currentBook = null;
+      document.getElementById('bookName').value = '';
+      document.getElementById('rate').value = '';
+      document.getElementById('bundlePacking').value = '';
+      document.getElementById('totalUnits').textContent = '0';
+      document.getElementById('totalAmount').textContent = '₹ 0.00';
+    }
+
+    // ── Recalculate ──
+    document.getElementById('unitQty').addEventListener('input', recalc);
+    document.getElementById('bundleQty').addEventListener('input', recalc);
+
+    function recalc() {
+      var unitQty = parseInt(document.getElementById('unitQty').value) || 0;
+      var bundleQty = parseInt(document.getElementById('bundleQty').value) || 0;
+      var packing = currentBook ? currentBook.bundlePacking : 0;
+      var rate = currentBook ? currentBook.rate : 0;
+      var totalUnits = unitQty + (bundleQty * packing);
+      var totalAmount = totalUnits * rate;
+      document.getElementById('totalUnits').textContent = totalUnits;
+      document.getElementById('totalAmount').textContent = '₹ ' + totalAmount.toFixed(2);
+    }
+
+    // ── Add to Cart ──
+    function addToCart() {
+      if (!currentBook) { alert('Please enter a valid Book Code first.'); return; }
+      var unitQty = parseInt(document.getElementById('unitQty').value) || 0;
+      var bundleQty = parseInt(document.getElementById('bundleQty').value) || 0;
+      if (unitQty < 0 || bundleQty < 0) { alert('Quantities cannot be negative.'); return; }
+      if (unitQty === 0 && bundleQty === 0) { alert('At least one quantity must be greater than 0.'); return; }
+
+      var packing = currentBook.bundlePacking;
+      var rate = currentBook.rate;
+      var totalUnits = unitQty + (bundleQty * packing);
+      var totalAmount = totalUnits * rate;
+
+      var existing = cart.find(function(item) { return item.bookCode === currentBook.bookCode; });
+      if (existing) {
+        existing.unitQty += unitQty;
+        existing.bundleQty += bundleQty;
+        existing.totalUnits = existing.unitQty + (existing.bundleQty * existing.bundlePacking);
+        existing.totalAmount = existing.totalUnits * existing.rate;
+      } else {
+        cart.push({
+          bookCode: currentBook.bookCode,
+          bookName: currentBook.bookName,
+          rate: rate,
+          bundlePacking: packing,
+          unitQty: unitQty,
+          bundleQty: bundleQty,
+          totalUnits: totalUnits,
+          totalAmount: totalAmount
+        });
+      }
+
+      renderCart();
+      document.getElementById('bookCode').value = '';
+      document.getElementById('unitQty').value = '0';
+      document.getElementById('bundleQty').value = '0';
+      clearBookFields();
+      document.getElementById('bookCode').focus();
+    }
+
+    // ── Render Cart ──
+    function renderCart() {
+      var tbody = document.getElementById('cartBody');
+      tbody.innerHTML = '';
+      if (cart.length === 0) {
+        tbody.innerHTML = '<tr id="emptyRow"><td colspan="10" class="cart-empty">No books added to cart yet.</td></tr>';
+        updateSummary();
+        return;
+      }
+      cart.forEach(function(item, i) {
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + (i + 1) + '</td>' +
+          '<td>' + item.bookCode + '</td>' +
+          '<td>' + item.bookName + '</td>' +
+          '<td>₹ ' + item.rate.toFixed(2) + '</td>' +
+          '<td>' + item.bundlePacking + '</td>' +
+          '<td>' + item.unitQty + '</td>' +
+          '<td>' + item.bundleQty + '</td>' +
+          '<td>' + item.totalUnits + '</td>' +
+          '<td>₹ ' + item.totalAmount.toFixed(2) + '</td>' +
+          '<td><button class="btn-remove" onclick="removeItem(' + i + ')">Remove</button></td>';
+        tbody.appendChild(tr);
+      });
+      updateSummary();
+    }
+
+    function updateSummary() {
+      var totalBooks = cart.length;
+      var grandUnits = 0, grandAmount = 0;
+      cart.forEach(function(item) {
+        grandUnits += item.totalUnits;
+        grandAmount += item.totalAmount;
+      });
+      document.getElementById('sumBooks').textContent = totalBooks;
+      document.getElementById('sumUnits').textContent = grandUnits;
+      document.getElementById('sumAmount').textContent = '₹ ' + grandAmount.toFixed(2);
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    // ── Reset Cart ──
+    function resetCart() {
+      if (cart.length > 0 && !confirm('Are you sure you want to reset the cart?')) return;
+      cart = [];
+      renderCart();
+      document.getElementById('bookCode').value = '';
+      document.getElementById('unitQty').value = '0';
+      document.getElementById('bundleQty').value = '0';
+      clearBookFields();
+    }
+
+    // ── Save ──
+    function saveRecord() {
+      var sellingDate = document.getElementById('sellingDate').value;
+      var branchName = document.getElementById('branchName').value;
+      var sellerName = document.getElementById('sellerName').value.trim();
+      var sellerMobile = document.getElementById('sellerMobile').value.trim();
+      var remarks = '';
+
+      if (!sellingDate) { alert('Please select a Selling Date.'); return; }
+      if (!branchName) { alert('Please select a Branch Name.'); return; }
+      if (!sellerName) { alert('Please enter Seller Name.'); return; }
+      if (!/^\d{10}$/.test(sellerMobile)) { alert('Seller Mobile must be exactly 10 digits.'); return; }
+      if (cart.length === 0) { alert('Cart is empty. Add at least one book.'); return; }
+
+      var sellerDetails = {
+        sellingDate: sellingDate,
+        branchName: branchName,
+        sellerName: sellerName,
+        sellerMobile: sellerMobile,
+        remarks: remarks
+      };
+
+      showLoading(true);
+
+      if (typeof google !== 'undefined' && google.script) {
+        google.script.run
+          .withSuccessHandler(handleSaveSuccess)
+          .withFailureHandler(function(e) { showLoading(false); alert('Save failed: ' + e); })
+          .saveSalesData(sellerDetails, cart);
+      } else {
+        var payload = JSON.stringify({ sellerDetails: sellerDetails, cartItems: cart });
+        postToAppsScript(payload);
+      }
+    }
+
+    function postToAppsScript(payload) {
+      var iframeName = 'appsScriptSaveFrame';
+      var iframe = document.getElementById(iframeName);
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.name = iframeName;
+        iframe.id = iframeName;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+      }
+
+      var form = document.createElement('form');
+      form.method = 'POST';
+      form.action = APPS_SCRIPT_URL;
+      form.target = iframeName;
+      form.style.display = 'none';
+
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'payload';
+      input.value = payload;
+      form.appendChild(input);
+      document.body.appendChild(form);
+
+      var finished = false;
+      iframe.onload = function() {
+        if (finished) return;
+        finished = true;
+        document.body.removeChild(form);
+        handleSaveSuccess({ success: true, message: cart.length + ' item(s) submitted successfully!' });
+      };
+
+      form.submit();
+
+      setTimeout(function() {
+        if (finished) return;
+        finished = true;
+        if (form.parentNode) document.body.removeChild(form);
+        handleSaveSuccess({ success: true, message: cart.length + ' item(s) submitted. Please check SalesData sheet.' });
+      }, 5000);
+    }
+
+    function handleSaveSuccess(result) {
+      showLoading(false);
+      if (result.success) {
+        alert(result.message);
+        cart = [];
+        renderCart();
+        document.getElementById('bookCode').value = '';
+        document.getElementById('unitQty').value = '0';
+        document.getElementById('bundleQty').value = '0';
+        clearBookFields();
+      } else {
+        alert('Error: ' + result.message);
+      }
+    }
+
+    function showLoading(show) {
+      document.getElementById('loadingOverlay').classList.toggle('active', show);
+    }
+  </script>
+</body>
+</html>
