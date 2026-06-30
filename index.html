@@ -759,50 +759,41 @@
           .saveSalesData(sellerDetails, cart);
       } else {
         var payload = JSON.stringify({ sellerDetails: sellerDetails, cartItems: cart });
-        postToAppsScript(payload);
+        saveWithAppsScript(payload);
       }
     }
 
-    function postToAppsScript(payload) {
-      var iframeName = 'appsScriptSaveFrame';
-      var iframe = document.getElementById(iframeName);
-      if (!iframe) {
-        iframe = document.createElement('iframe');
-        iframe.name = iframeName;
-        iframe.id = iframeName;
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-      }
+    function saveWithAppsScript(payload) {
+      var callbackName = 'bookSalesSaveCallback_' + Date.now();
+      var script = document.createElement('script');
+      var timeoutId = null;
 
-      var form = document.createElement('form');
-      form.method = 'POST';
-      form.action = APPS_SCRIPT_URL;
-      form.target = iframeName;
-      form.style.display = 'none';
-
-      var input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'payload';
-      input.value = payload;
-      form.appendChild(input);
-      document.body.appendChild(form);
-
-      var finished = false;
-      iframe.onload = function() {
-        if (finished) return;
-        finished = true;
-        document.body.removeChild(form);
-        handleSaveSuccess({ success: true, message: cart.length + ' item(s) submitted successfully!' });
+      window[callbackName] = function(result) {
+        clearTimeout(timeoutId);
+        delete window[callbackName];
+        if (script.parentNode) document.body.removeChild(script);
+        handleSaveSuccess(result);
       };
 
-      form.submit();
+      script.onerror = function() {
+        clearTimeout(timeoutId);
+        delete window[callbackName];
+        if (script.parentNode) document.body.removeChild(script);
+        showLoading(false);
+        alert('Save failed. Apps Script URL/deployment is not responding.');
+      };
 
-      setTimeout(function() {
-        if (finished) return;
-        finished = true;
-        if (form.parentNode) document.body.removeChild(form);
-        handleSaveSuccess({ success: true, message: cart.length + ' item(s) submitted. Please check SalesData sheet.' });
-      }, 5000);
+      timeoutId = setTimeout(function() {
+        delete window[callbackName];
+        if (script.parentNode) document.body.removeChild(script);
+        showLoading(false);
+        alert('Save failed. Apps Script took too long to respond.');
+      }, 15000);
+
+      script.src = APPS_SCRIPT_URL +
+        '?action=save&callback=' + encodeURIComponent(callbackName) +
+        '&data=' + encodeURIComponent(payload);
+      document.body.appendChild(script);
     }
 
     function handleSaveSuccess(result) {

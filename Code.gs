@@ -10,7 +10,11 @@ var BRANCHES = [
 function doGet(e) {
   if (e && e.parameter && e.parameter.action === 'save') {
     var getPayload = JSON.parse(e.parameter.data || '{}');
-    return jsonResponse_(saveSalesData(getPayload.sellerDetails, getPayload.cartItems));
+    var saveResult = saveSalesData(getPayload.sellerDetails, getPayload.cartItems);
+    if (e.parameter.callback) {
+      return javascriptResponse_(e.parameter.callback, saveResult);
+    }
+    return jsonResponse_(saveResult);
   }
 
   var template = HtmlService.createTemplateFromFile('index');
@@ -150,4 +154,10 @@ function validateSavePayload_(sellerDetails, cartItems) {
 function jsonResponse_(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function javascriptResponse_(callbackName, data) {
+  var safeCallbackName = String(callbackName).replace(/[^\w$.]/g, '');
+  return ContentService.createTextOutput(safeCallbackName + '(' + JSON.stringify(data) + ');')
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
