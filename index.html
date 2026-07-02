@@ -38,6 +38,12 @@
       color: #8B1A1A;
     }
     .header-logo svg { width: 28px; height: 28px; fill: #8B1A1A; }
+    .header-logo-img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      display: block;
+    }
     .header-nav { display: flex; align-items: center; gap: 24px; }
     .header-nav a {
       text-decoration: none;
@@ -361,6 +367,7 @@
       .form-grid.cols-3, .form-grid.cols-4, .form-grid.cols-2 { grid-template-columns: 1fr; }
       .form-group.span-2 { grid-column: span 1; }
       .header-logo { font-size: 16px; }
+      .header-logo-img { width: 34px; height: 34px; }
       .header-icons { gap: 10px; }
       .header-brand-logo { width: 42px; height: 42px; }
     }
@@ -371,11 +378,10 @@
   <!-- Header -->
   <header class="header">
     <div class="header-logo">
-      <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-      <span data-i18n="appTitle">Book Sales Collection</span>
+      <img class="header-logo-img" src="assets/gita-press-logo.png" alt="Gita Press logo">
+      <span data-i18n="appTitle">Gita press, Gorakhpur</span>
     </div>
     <div class="header-icons">
-      <img class="header-brand-logo" src="assets/gita-press-logo.png" alt="Gita Press logo">
       <button class="lang-toggle" id="langToggle" type="button" onclick="toggleLanguage()">हिन्दी</button>
       <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
       <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
@@ -561,7 +567,7 @@
 
     var I18N = {
       en: {
-        appTitle: 'Book Sales Collection',
+        appTitle: 'Gita press, Gorakhpur',
         pageTitle: 'Book Sales Entry Portal',
         pageSubtitle: 'Record multiple book sales in a single transaction. Manage your cart and synchronize with central Gita Press archives.',
         sectionSeller: 'Section 1: Seller / Branch Details',
@@ -622,7 +628,7 @@
         saveSuccess: 'Record saved successfully!'
       },
       hi: {
-        appTitle: 'पुस्तक बिक्री संग्रह',
+        appTitle: 'Gita press, Gorakhpur',
         pageTitle: 'पुस्तक बिक्री एंट्री पोर्टल',
         pageSubtitle: 'एक ही लेन-देन में कई पुस्तकों की बिक्री दर्ज करें। कार्ट संभालें और रिकॉर्ड Google Sheet में सेव करें।',
         sectionSeller: 'भाग 1: विक्रेता / शाखा विवरण',
