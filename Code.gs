@@ -65,7 +65,6 @@ function saveSalesData(sellerDetails, cartItems) {
     var timestamp = new Date();
     var rows = cartItems.map(function(item) {
       return [
-        sellerDetails.sellingDate,
         sellerDetails.branchName,
         sellerDetails.sellerName,
         sellerDetails.sellerMobile,
@@ -85,7 +84,7 @@ function saveSalesData(sellerDetails, cartItems) {
     var lock = LockService.getScriptLock();
     lock.waitLock(30000);
     try {
-      sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, 14).setValues(rows);
+      sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, 13).setValues(rows);
     } finally {
       lock.releaseLock();
     }
@@ -114,12 +113,17 @@ function getSalesSpreadsheet_() {
 
 function ensureSalesHeader_(sheet) {
   var headers = [
-    'Selling Date', 'Branch Name', 'Seller Name', 'Seller Mobile', 'Remarks',
+    'Branch Name', 'Seller Name', 'Seller Mobile', 'Remarks',
     'Book Code', 'Book Name', 'Rate', 'Bundle Packing Number',
     'Unit Quantity', 'Bundle Quantity', 'Total Units', 'Total Amount', 'Submitted On'
   ];
 
   var firstCell = sheet.getRange(1, 1).getValue();
+  if (firstCell === 'Selling Date') {
+    sheet.deleteColumn(1);
+    firstCell = sheet.getRange(1, 1).getValue();
+  }
+
   if (firstCell === '' || firstCell !== headers[0]) {
     if (firstCell !== '') {
       sheet.insertRowBefore(1);
@@ -133,9 +137,6 @@ function ensureSalesHeader_(sheet) {
 function validateSavePayload_(sellerDetails, cartItems) {
   if (!sellerDetails) {
     throw new Error('Seller details are missing.');
-  }
-  if (!sellerDetails.sellingDate) {
-    throw new Error('Selling date is missing.');
   }
   if (!sellerDetails.branchName) {
     throw new Error('Branch name is missing.');

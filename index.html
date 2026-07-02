@@ -393,11 +393,7 @@
         <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4z"/></svg>
         <span data-i18n="sectionSeller">Section 1: Seller / Branch Details</span>
       </div>
-      <div class="form-grid cols-2">
-        <div class="form-group">
-          <label><span data-i18n="sellingDate">Selling Date</span> <span style="color:#c0392b">*</span></label>
-          <input type="date" id="sellingDate" required>
-        </div>
+      <div class="form-grid cols-3">
         <div class="form-group">
           <label><span data-i18n="branchName">Branch Name</span> <span style="color:#c0392b">*</span></label>
           <select id="branchName">
@@ -569,7 +565,6 @@
         pageTitle: 'Book Sales Entry Portal',
         pageSubtitle: 'Record multiple book sales in a single transaction. Manage your cart and synchronize with central Gita Press archives.',
         sectionSeller: 'Section 1: Seller / Branch Details',
-        sellingDate: 'Selling Date',
         branchName: 'Branch Name',
         selectBranch: 'Select Branch',
         sellerName: 'Seller Name',
@@ -612,7 +607,6 @@
         qtyNegative: 'Quantities cannot be negative.',
         qtyRequired: 'At least one quantity must be greater than 0.',
         resetConfirm: 'Are you sure you want to reset the cart?',
-        dateRequired: 'Please select a Selling Date.',
         branchRequired: 'Please select a Branch Name.',
         sellerRequired: 'Please enter Seller Name.',
         mobileRequired: 'Seller Mobile must be exactly 10 digits.',
@@ -632,7 +626,6 @@
         pageTitle: 'पुस्तक बिक्री एंट्री पोर्टल',
         pageSubtitle: 'एक ही लेन-देन में कई पुस्तकों की बिक्री दर्ज करें। कार्ट संभालें और रिकॉर्ड Google Sheet में सेव करें।',
         sectionSeller: 'भाग 1: विक्रेता / शाखा विवरण',
-        sellingDate: 'बिक्री दिनांक',
         branchName: 'शाखा का नाम',
         selectBranch: 'शाखा चुनें',
         sellerName: 'विक्रेता का नाम',
@@ -675,7 +668,6 @@
         qtyNegative: 'मात्रा नकारात्मक नहीं हो सकती।',
         qtyRequired: 'कम से कम एक मात्रा 0 से अधिक होनी चाहिए।',
         resetConfirm: 'क्या आप कार्ट रीसेट करना चाहते हैं?',
-        dateRequired: 'कृपया बिक्री दिनांक चुनें।',
         branchRequired: 'कृपया शाखा का नाम चुनें।',
         sellerRequired: 'कृपया विक्रेता का नाम दर्ज करें।',
         mobileRequired: 'विक्रेता मोबाइल ठीक 10 अंकों का होना चाहिए।',
@@ -717,8 +709,6 @@
 
     // ── Init ──
     window.addEventListener('DOMContentLoaded', function() {
-      var today = new Date().toISOString().split('T')[0];
-      document.getElementById('sellingDate').value = today;
       setLanguage(currentLang);
       loadBranches();
     });
@@ -907,20 +897,17 @@
 
     // ── Save ──
     function saveRecord() {
-      var sellingDate = document.getElementById('sellingDate').value;
       var branchName = document.getElementById('branchName').value;
       var sellerName = document.getElementById('sellerName').value.trim();
       var sellerMobile = document.getElementById('sellerMobile').value.trim();
       var remarks = '';
 
-      if (!sellingDate) { alert(t('dateRequired')); return; }
       if (!branchName) { alert(t('branchRequired')); return; }
       if (!sellerName) { alert(t('sellerRequired')); return; }
       if (!/^\d{10}$/.test(sellerMobile)) { alert(t('mobileRequired')); return; }
       if (cart.length === 0) { alert(t('cartRequired')); return; }
 
       var sellerDetails = {
-        sellingDate: sellingDate,
         branchName: branchName,
         sellerName: sellerName,
         sellerMobile: sellerMobile,
